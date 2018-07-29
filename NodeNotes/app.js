@@ -1,13 +1,23 @@
 console.log('start');
 
 const fs = require('fs');
-const os = require('os');
+const _ = require('lodash');
+const yargs = require('yargs');
+
 const notes = require('./notes.js');
 
-let user = os.userInfo();
+const argvs = yargs.argv;
+const command = argvs._[0];
+console.log(argvs);
 
-fs.appendFile('file.txt', `Hello ${user.username}, number is ${notes.addTwoNums(1, 2)}`, function (err) {
-    if (err) {
-        console.log('error');
-    }
-});
+if (command === 'add') {
+    notes.addNote(argvs.title, argvs.body);
+} else if (command === 'list') {
+    notes.getAll();
+} else if (command === 'remove') {
+    notes.removeNote(argvs.title);
+} else if (command === 'read') {
+    notes.readNote(argvs.title);
+} else {
+    console.log('Wrong command');
+}
